@@ -6,7 +6,7 @@
 |---|---|
 | **Name** | _<your full name>_ |
 | **Registration number** | _<your registration number>_ |
-| **Live site (HTTPS)** | _<https://your-project.pages.dev>_ |
+| **Live site (HTTPS)** | https://ai-dev-fest-2026-vibe-coding-mock.pages.dev |
 | **Repository** | https://github.com/shihabshahrier/AI-DEV-FEST-2026-VIBE-CODING-MOCK- |
 
 Smart Escape loads a building graph (`building.json`), draws it as an interactive blueprint, and finds the
