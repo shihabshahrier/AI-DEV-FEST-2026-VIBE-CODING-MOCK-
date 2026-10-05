@@ -124,7 +124,7 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   pointer-events: none;
-  animation: ghost 900ms var(--ease) forwards;
+  animation: ghost 1400ms linear forwards;
 }
 
 /* --- nodes --- */
@@ -293,6 +293,9 @@
   z-index: 5;
   animation: fade-in var(--dur-1) var(--ease);
 }
+.map-tip.is-below {
+  transform: translate(-50%, 6px);
+}
 .map-tip__title {
   font-weight: 600;
   color: var(--text);
@@ -354,10 +357,13 @@
   }
 }
 @keyframes ghost {
-  from {
-    opacity: 0.85;
+  0% {
+    opacity: 0.95;
   }
-  to {
+  45% {
+    opacity: 0.7;
+  }
+  100% {
     opacity: 0;
   }
 }

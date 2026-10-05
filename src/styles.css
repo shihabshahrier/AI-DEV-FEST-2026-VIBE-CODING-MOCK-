@@ -1549,3 +1549,63 @@ html[lang="bn"] body {
     transform: translateY(0);
   }
 }
+
+/* --------------------------------------------------------------------------
+   Stage layout: toolbar / map area / legend strip (map never sits under controls)
+   -------------------------------------------------------------------------- */
+.stage-bar {
+  position: relative;
+  z-index: 2;
+  padding: 12px 16px;
+  background: rgba(16, 24, 42, 0.6);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+.stage-bar--top {
+  border-bottom: 1px solid var(--border);
+}
+.stage-bar--bottom {
+  border-top: 1px solid var(--border);
+  padding: 10px 16px;
+}
+.stage-bar--top .mode-switch {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.stage-bar--top .mode-switch__segmented {
+  min-width: 290px;
+}
+.stage-bar--top .mode-switch__hint {
+  max-width: none;
+  flex: 1 1 220px;
+}
+.map-area {
+  position: relative;
+  flex: 1;
+  min-height: 360px;
+}
+.stage-bar--bottom .legend {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.stage-bar--bottom .legend__header {
+  width: auto;
+}
+.stage-bar--bottom .legend__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+@media (max-width: 600px) {
+  .stage-bar--top .mode-switch__segmented {
+    min-width: 0;
+    width: 100%;
+  }
+}

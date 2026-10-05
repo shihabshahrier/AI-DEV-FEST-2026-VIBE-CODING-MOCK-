@@ -235,19 +235,21 @@ function Shell() {
       {graph ? (
         <main className="workspace">
           <section className="map-stage">
-            <MapView
-              graph={graph}
-              hazards={hazards}
-              result={result}
-              ghostPath={ghostPath}
-              highlightId={highlightId}
-              onNodeClick={onNodeClick}
-              onEdgeClick={(id) => toggle('blockedEdges', id)}
-            />
-            <div className="overlay overlay-tl">
+            <div className="stage-bar stage-bar--top">
               <ModeSwitch mode={mode} onChange={setMode} />
             </div>
-            <div className="overlay overlay-bl">
+            <div className="map-area">
+              <MapView
+                graph={graph}
+                hazards={hazards}
+                result={result}
+                ghostPath={ghostPath}
+                highlightId={highlightId}
+                onNodeClick={onNodeClick}
+                onEdgeClick={(id) => toggle('blockedEdges', id)}
+              />
+            </div>
+            <div className="stage-bar stage-bar--bottom">
               <Legend />
             </div>
           </section>

@@ -32,12 +32,20 @@ export default function MapView({ graph, hazards, result, ghostPath, highlightId
     const svg = svgRef.current
     const stage = stageRef.current
     if (!svg || !stage) return
-    const pt = svg.createSVGPoint()
-    pt.x = p.x
-    pt.y = p.y - r * 1.4
-    const s = pt.matrixTransform(svg.getScreenCTM())
     const box = stage.getBoundingClientRect()
-    setHover({ id, left: s.x - box.left, top: s.y - box.top })
+    const toStage = (y) => {
+      const pt = svg.createSVGPoint()
+      pt.x = p.x
+      pt.y = y
+      const s = pt.matrixTransform(svg.getScreenCTM())
+      return { x: s.x - box.left, y: s.y - box.top }
+    }
+    // Keep the tooltip inside the stage: clamp sideways, flip below near the top edge.
+    const above = toStage(p.y - r * 1.4)
+    const below = above.y < 96
+    const anchor = below ? toStage(p.y + r * 1.4) : above
+    const left = Math.min(Math.max(anchor.x, 130), box.width - 130)
+    setHover({ id, left, top: anchor.y, below })
   }
 
   const activate = (handler, id) => (e) => {
@@ -196,7 +204,11 @@ export default function MapView({ graph, hazards, result, ghostPath, highlightId
       </svg>
 
       {hover && (
-        <div className="map-tip" style={{ left: hover.left, top: hover.top }} role="tooltip">
+        <div
+          className={`map-tip${hover.below ? ' is-below' : ''}`}
+          style={{ left: hover.left, top: hover.top }}
+          role="tooltip"
+        >
           <NodeTip node={graph.nodeById.get(hover.id)} hazards={hazards} result={result} />
         </div>
       )}
