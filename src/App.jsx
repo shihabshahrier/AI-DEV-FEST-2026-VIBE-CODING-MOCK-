@@ -202,7 +202,7 @@ function Shell() {
       setDragging(true)
     },
     onDragLeave: (e) => {
-      if (e.currentTarget === e.target) setDragging(false)
+      if (!e.currentTarget.contains(e.relatedTarget)) setDragging(false)
     },
     onDrop: (e) => {
       e.preventDefault()

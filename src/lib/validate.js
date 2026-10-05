@@ -11,7 +11,7 @@ const isNonEmptyString = (v) => typeof v === 'string' && v.trim() !== ''
 export function parseBuildingText(text) {
   let data
   try {
-    data = JSON.parse(text)
+    data = JSON.parse(text.replace(/^\uFEFF/, '')) // tolerate a UTF-8 byte-order mark
   } catch {
     return { ok: false, errors: [{ code: 'json' }] }
   }
@@ -63,8 +63,11 @@ export function validateBuilding(data) {
       if (edgeById.has(e.id)) return err('edgeDupId', { id: e.id })
       edgeById.set(e.id, null) // reserve the id; replaced by the edge once it validates
       const before = errors.length
-      for (const end of [e.from, e.to]) {
-        if (typeof end !== 'string' || !nodeById.has(end)) err('edgeEndpoint', { id: e.id, node: String(end) })
+      // Without a valid nodes array every endpoint would be "unknown"; report nodesArray only.
+      if (Array.isArray(data.nodes)) {
+        for (const end of [e.from, e.to]) {
+          if (typeof end !== 'string' || !nodeById.has(end)) err('edgeEndpoint', { id: e.id, node: String(end) })
+        }
       }
       if (errors.length === before && e.from === e.to) err('edgeSelf', { id: e.id })
       if (!Number.isInteger(e.cost) || e.cost <= 0) err('edgeCost', { id: e.id })

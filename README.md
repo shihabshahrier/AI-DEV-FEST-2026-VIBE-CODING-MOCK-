@@ -32,7 +32,7 @@ Requires Node.js 22 (pinned in `.node-version`).
 npm install
 npm run dev      # local dev server
 npm run build    # production build into dist/
-npm test         # 25 unit + brute-force fuzz tests (vitest)
+npm test         # 27 unit + brute-force fuzz tests (vitest)
 ```
 
 **Deployment:** Cloudflare Pages, connected to this repo — build command `npm run build`, output directory `dist`.
@@ -68,7 +68,7 @@ smallest node-ID sequence (plain code-unit order, case-sensitive). Each node kee
 an equal-cost path replaces the stored one only if its node sequence is smaller. Note: in the sample, blocking C2 creates
 a cost-11 tie between `R1-C1-C3-C4-E2` and `R1-R2-C3-C4-E2`; the tie-break correctly picks the first.
 
-Verified by 24 rule tests (the five sample checks, ties, case sensitivity, disconnected graphs, invalid input) and a fuzz
+Verified by 26 rule tests (the five sample checks, ties, case sensitivity, disconnected graphs, invalid input) and a fuzz
 test comparing the router with brute-force enumeration of all simple paths on 1,500 random graphs with random hazards.
 
 ## Bonus features
@@ -84,7 +84,7 @@ test comparing the router with brute-force enumeration of all simple paths on 1,
 ## Known problems
 
 - No zoom/pan: very dense maps (nodes almost on top of each other) can have overlapping labels, although markers shrink
-  automatically on crowded maps.
+  automatically on crowded maps. On phones the map keeps a readable minimum width and scrolls sideways inside its frame.
 - PNG export is not implemented.
 - If the browser blocks `localStorage` (some private modes), progress is simply not saved.
 

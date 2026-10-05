@@ -1609,3 +1609,15 @@ html[lang="bn"] body {
     width: 100%;
   }
 }
+
+/* Phones: keep the map readable and tappable; it scrolls sideways inside its frame. */
+@media (max-width: 700px) {
+  .map-area {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+  .map-area .map {
+    right: auto;
+    width: max(100%, 600px);
+  }
+}

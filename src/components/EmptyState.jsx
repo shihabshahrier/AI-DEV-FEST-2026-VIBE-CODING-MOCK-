@@ -17,17 +17,6 @@ export default function EmptyState({ onFile, onLoadSample, dragging }) {
     }
   }
 
-  const handleDrop = (e) => {
-    e.preventDefault()
-    if (e.dataTransfer.files?.[0]) {
-      onFile(e.dataTransfer.files[0])
-    }
-  }
-
-  const handleDragOver = (e) => {
-    e.preventDefault()
-  }
-
   const handleFileChange = (e) => {
     if (e.target.files?.[0]) {
       onFile(e.target.files[0])
@@ -105,8 +94,6 @@ export default function EmptyState({ onFile, onLoadSample, dragging }) {
             tabIndex={0}
             onClick={handleZoneClick}
             onKeyDown={handleKeyDown}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
             aria-label={t('empty.drop')}
           >
             <div className="empty-state__dropzone-icon" aria-hidden="true">

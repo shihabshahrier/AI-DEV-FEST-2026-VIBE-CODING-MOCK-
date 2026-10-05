@@ -61,7 +61,7 @@ export default function MapView({ graph, hazards, result, ghostPath, highlightId
         className="map-svg"
         viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio="xMidYMid meet"
-        role="img"
+        role="group"
         aria-label={graph.building}
         style={{ '--k': k }}
       >
@@ -203,7 +203,8 @@ export default function MapView({ graph, hazards, result, ghostPath, highlightId
         </g>
       </svg>
 
-      {hover && (
+      {/* A newly imported file may not contain the hovered node. */}
+      {hover && graph.nodeById.has(hover.id) && (
         <div
           className={`map-tip${hover.below ? ' is-below' : ''}`}
           style={{ left: hover.left, top: hover.top }}

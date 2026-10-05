@@ -161,6 +161,14 @@ describe('validation', () => {
     expect(parseBuildingText('{nope').errors[0].code).toBe('json')
   })
 
+  it('accepts a UTF-8 byte-order mark', () => {
+    expect(parseBuildingText('\uFEFF' + JSON.stringify(sample)).ok).toBe(true)
+  })
+
+  it('does not cascade endpoint errors when nodes is not an array', () => {
+    expect(codes({ ...sample, nodes: {} })).toEqual(['nodesArray'])
+  })
+
   it('rejects non-object roots and missing sections', () => {
     expect(codes([])).toEqual(['root'])
     expect(codes({})).toEqual(expect.arrayContaining(['building', 'nodesArray', 'edgesArray', 'state']))
