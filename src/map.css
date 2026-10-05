@@ -1,0 +1,408 @@
+/* ===== SVG map: corridors, route, nodes ===== */
+.map {
+  position: absolute;
+  inset: 0;
+}
+
+.map-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+.map-svg :focus {
+  outline: none;
+}
+
+/* --- corridors --- */
+.edge__line {
+  stroke: var(--line);
+  stroke-width: calc(4px * var(--k));
+  stroke-linecap: round;
+  transition: stroke var(--dur-2) var(--ease), opacity var(--dur-2) var(--ease);
+}
+.edge__hit {
+  stroke: transparent;
+  stroke-width: 18px;
+  cursor: pointer;
+}
+.edge:hover .edge__line {
+  stroke: #3B4B6E;
+}
+.edge__hit:focus-visible {
+  stroke: var(--route-glow);
+}
+.edge.is-unusable .edge__line {
+  stroke: var(--faint);
+  stroke-dasharray: 2 8;
+  opacity: 0.55;
+}
+.edge.is-blocked .edge__line {
+  stroke: var(--hazard);
+  stroke-dasharray: 10 8;
+  opacity: 0.9;
+  animation: pop-line var(--dur-2) var(--ease);
+}
+
+.edge-cost {
+  cursor: pointer;
+}
+.edge-cost rect {
+  fill: var(--surface-2);
+  stroke: var(--border-strong);
+  stroke-width: 1px;
+  transition: fill var(--dur-2) var(--ease), stroke var(--dur-2) var(--ease);
+}
+.edge-cost text {
+  fill: var(--muted);
+  font: 600 12px var(--font-mono);
+  text-anchor: middle;
+  pointer-events: none;
+}
+.edge-cost.is-route rect {
+  fill: #0E2A3A;
+  stroke: var(--route);
+}
+.edge-cost.is-route text {
+  fill: var(--route);
+}
+.edge-cost.is-blocked rect {
+  fill: var(--hazard);
+  stroke: var(--hazard);
+}
+.edge-cost.is-blocked text {
+  fill: #fff;
+}
+
+/* --- route --- */
+.route {
+  pointer-events: none;
+}
+.route path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.route__glow {
+  stroke: var(--route);
+  stroke-width: calc(14px * var(--k));
+  opacity: 0.35;
+  animation: fade-in var(--dur-3) var(--ease) both;
+}
+.route__line {
+  stroke: var(--route);
+  stroke-width: calc(6px * var(--k));
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw var(--dur-3) var(--ease) forwards;
+}
+.route__flow {
+  stroke: #E6FAFF;
+  stroke-width: calc(2px * var(--k));
+  stroke-dasharray: 4 14;
+  opacity: 0;
+  animation:
+    fade-in var(--dur-2) var(--ease) var(--dur-3) forwards,
+    flow 1.6s linear infinite;
+}
+.route__runner {
+  fill: #fff;
+  filter: drop-shadow(0 0 6px var(--route));
+  offset-rotate: 0deg;
+  offset-distance: 0%;
+  opacity: 0;
+  animation: run 1.3s var(--ease) var(--dur-3) forwards;
+}
+
+.route-ghost {
+  fill: none;
+  stroke: var(--hazard);
+  stroke-width: calc(5px * var(--k));
+  stroke-dasharray: 8 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  animation: ghost 900ms var(--ease) forwards;
+}
+
+/* --- nodes --- */
+.node {
+  cursor: pointer;
+}
+.node__body {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pop var(--dur-2) var(--ease);
+}
+.node__shape {
+  fill: var(--surface-3);
+  stroke: #94A3B8;
+  stroke-width: 2px;
+  transition: fill var(--dur-2) var(--ease), stroke var(--dur-2) var(--ease), filter var(--dur-2) var(--ease);
+}
+.node--junction .node__shape {
+  stroke: #64748B;
+}
+.node__id {
+  fill: var(--text);
+  font: 700 calc(13px * max(var(--k), 0.8)) var(--font-mono);
+  text-anchor: middle;
+  pointer-events: none;
+}
+.node__label {
+  fill: var(--muted);
+  font: 500 calc(12px * max(var(--k), 0.75)) var(--font-ui);
+  text-anchor: middle;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.node--exit .node__shape {
+  fill: var(--exit);
+  stroke: #7CF0BD;
+  filter: drop-shadow(0 0 10px rgba(43, 217, 140, 0.35));
+}
+.node--exit .node__id {
+  fill: var(--exit-ink);
+}
+.node--exit .node__label {
+  fill: var(--exit);
+  font-weight: 600;
+}
+
+.node.is-route .node__shape {
+  fill: #0E3A52;
+  stroke: var(--route);
+}
+.node--exit.is-dest .node__shape {
+  fill: var(--exit);
+  stroke: #fff;
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 16px rgba(43, 217, 140, 0.7));
+}
+
+.node.is-start .node__shape {
+  fill: var(--route);
+  stroke: #fff;
+}
+.node.is-start .node__id {
+  fill: #021019;
+}
+.node__halo {
+  fill: none;
+  stroke: var(--route);
+  stroke-width: 2px;
+  opacity: 0.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: halo var(--dur-3) var(--ease);
+  pointer-events: none;
+}
+
+.node.is-blocked .node__shape {
+  fill: url(#hazard-stripes);
+  stroke: var(--hazard);
+}
+.node.is-blocked .node__id {
+  fill: #fff;
+  paint-order: stroke;
+  stroke: #3A0D12;
+  stroke-width: 4px;
+}
+.node.is-blocked.is-start .node__halo {
+  stroke: var(--warn);
+}
+
+.node.is-closed .node__shape {
+  fill: #475569;
+  stroke: var(--warn);
+  filter: none;
+}
+.node.is-closed .node__id {
+  fill: #CBD5E1;
+  text-decoration: line-through;
+}
+.node.is-closed .node__label {
+  fill: var(--faint);
+}
+
+.node__badge circle {
+  stroke: var(--bg);
+  stroke-width: 2px;
+}
+.node__badge path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+.node__badge--blocked circle {
+  fill: var(--hazard);
+}
+.node__badge--closed circle {
+  fill: var(--warn);
+}
+.node__badge--closed path {
+  stroke: #1F1300;
+  stroke-width: 1.6px;
+}
+
+.node:hover .node__shape,
+.node.is-hover .node__shape,
+.node:focus-visible .node__shape {
+  stroke: #fff;
+  stroke-width: 3px;
+}
+.node:focus-visible .node__shape {
+  stroke: var(--route);
+}
+
+.pin {
+  pointer-events: none;
+  animation: pin-in var(--dur-3) var(--ease);
+}
+.pin rect {
+  fill: var(--route);
+}
+.pin text {
+  fill: #021019;
+  font: 700 10px var(--font-ui);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-anchor: middle;
+}
+
+/* --- tooltip --- */
+.map-tip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 6px));
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(16, 24, 42, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+  animation: fade-in var(--dur-1) var(--ease);
+}
+.map-tip__title {
+  font-weight: 600;
+  color: var(--text);
+}
+.map-tip__title .mono {
+  font-family: var(--font-mono);
+  color: var(--route);
+  margin-right: 4px;
+}
+.map-tip__meta {
+  color: var(--muted);
+  margin-top: 2px;
+}
+.map-tip__meta .mono {
+  font-family: var(--font-mono);
+  color: var(--text);
+}
+.map-tip__state.is-blocked {
+  color: var(--hazard);
+}
+.map-tip__state.is-closed {
+  color: var(--warn);
+}
+.map-tip__state.is-open {
+  color: var(--exit);
+}
+
+/* --- keyframes --- */
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes flow {
+  to {
+    stroke-dashoffset: -36;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes run {
+  0% {
+    offset-distance: 0%;
+    opacity: 1;
+  }
+  85% {
+    offset-distance: 100%;
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+@keyframes ghost {
+  from {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(0.82);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pop-line {
+  from {
+    opacity: 0.2;
+  }
+}
+@keyframes halo {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+}
+@keyframes pin-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route__line {
+    stroke-dashoffset: 0;
+  }
+  .route__flow {
+    opacity: 1;
+  }
+  .route__runner {
+    display: none;
+  }
+  .map-svg *,
+  .map-tip {
+    animation: none !important;
+    transition: none !important;
+  }
+}
