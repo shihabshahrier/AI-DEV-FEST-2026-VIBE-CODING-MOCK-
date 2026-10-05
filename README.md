@@ -4,8 +4,8 @@
 
 | | |
 |---|---|
-| **Name** | _<your full name>_ |
-| **Registration number** | _<your registration number>_ |
+| **Name** | Shihab Shahriar Antor |
+| **Registration number** | cmuera4ll01tzesknpqzhf0oo |
 | **Live site (HTTPS)** | https://ai-dev-fest-2026-vibe-coding-mock.pages.dev |
 | **Repository** | https://github.com/shihabshahrier/AI-DEV-FEST-2026-VIBE-CODING-MOCK- |
 
